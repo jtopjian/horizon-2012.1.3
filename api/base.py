@@ -117,9 +117,11 @@ def url_for(request, service_type, admin=False, endpoint_type=None):
     if service:
         try:
             if admin:
-                return service['endpoints'][0]['adminURL']
+                #return service['endpoints'][0]['adminURL']
+                return current_region['adminURL']
             else:
-                return service['endpoints'][0][endpoint_type]
+                #return service['endpoints'][0][endpoint_type]
+                return current_region[endpoint_type]
         except (IndexError, KeyError):
             raise exceptions.ServiceCatalogException(service_type)
     else:
