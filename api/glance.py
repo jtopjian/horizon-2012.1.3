@@ -89,9 +89,11 @@ def glanceclient(request):
     o = urlparse.urlparse(url_for(request, 'image'))
     LOG.debug('glanceclient connection created for host "%s:%d"' %
                      (o.hostname, o.port))
-    return glance_client.Client(o.hostname,
-                                o.port,
-                                auth_tok=request.user.token)
+    # jt
+    #return glance_client.Client(o.hostname,
+    #                            o.port,
+    #                            auth_tok=request.user.token)
+    return glance_client.get_client(o.hostname, o.port, auth_token=request.user.token, region=request.session.get('region_name', None), auth_url=request.session.get('region_endpoint', None), auth_strategy='keystone')
 
 
 @catch_glance_exception

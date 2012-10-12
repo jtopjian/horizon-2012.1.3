@@ -105,6 +105,15 @@ def url_for(request, service_type, admin=False, endpoint_type=None):
                                              'publicURL')
     catalog = request.user.service_catalog
     service = get_service_from_catalog(catalog, service_type)
+    # jt
+    region_name = request.session.get('region_name', None)
+    current_region = None
+    if region_name:
+        for e in service['endpoints']:
+          if e['region'] == region_name:
+              current_region = e
+        if not current_region:
+            current_region = service['endpoints'][0]
     if service:
         try:
             if admin:
