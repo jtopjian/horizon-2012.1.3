@@ -80,5 +80,10 @@ class IndexView(tables.MultiTableView):
 
     def _get_instances(self):
         if not hasattr(self, "_instances_list"):
-            self._instances_list = api.server_list(self.request)
-        return self._instances_list
+            #self._instances_list = api.server_list(self.request) 
+            # jt 
+            if self.request.user.is_admin(): 
+                self._instances_list = api.server_list(self.request, all_tenants=True)
+            else: 
+                self._instances_list = api.server_list(self.request) 
+        return self._instances_list 
