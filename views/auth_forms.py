@@ -77,7 +77,8 @@ class Login(forms.SelfHandlingForm):
         #self.fields['region'].choices = regions
         self.fields['region'].choices = new_regions
         if len(regions) == 1:
-            self.fields['region'].initial = default_region[0]
+            #self.fields['region'].initial = default_region[0]
+            self.fields['region'].initial = default_region[1]
             self.fields['region'].widget = forms.widgets.HiddenInput()
 
     def handle(self, request, data):
