@@ -72,7 +72,10 @@ class Login(forms.SelfHandlingForm):
         # remove this default region business.
         default_region = (settings.OPENSTACK_KEYSTONE_URL, "Default Region")
         regions = getattr(settings, 'AVAILABLE_REGIONS', [default_region])
-        self.fields['region'].choices = regions
+        # jt
+        new_regions = [(r[1],r[1]) for r in regions]
+        #self.fields['region'].choices = regions
+        self.fields['region'].choices = new_regions
         if len(regions) == 1:
             self.fields['region'].initial = default_region[0]
             self.fields['region'].widget = forms.widgets.HiddenInput()
@@ -90,8 +93,13 @@ class Login(forms.SelfHandlingForm):
 
         # For now we'll allow fallback to OPENSTACK_KEYSTONE_URL if the
         # form post doesn't include a region.
-        endpoint = data.get('region', None) or settings.OPENSTACK_KEYSTONE_URL
-        region_name = dict(self.fields['region'].choices)[endpoint]
+        # jt
+        default_region = (settings.OPENSTACK_KEYSTONE_URL, "Default Region") 
+        regions = getattr(settings, 'AVAILABLE_REGIONS', [default_region])
+        #endpoint = data.get('region', None) or settings.OPENSTACK_KEYSTONE_URL
+        #region_name = dict(self.fields['region'].choices)[endpoint]
+        region_name = data.get('region', None) or "Default Region"
+        endpoint = [r[0] for r in regions if r[1] == region_name][0]
         request.session['region_endpoint'] = endpoint
         request.session['region_name'] = region_name
 
